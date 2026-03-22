@@ -22,7 +22,8 @@
 		"tracy/tracy": "^2.10",
 		"nextras/migrations": "^3.5",
 		"contributte/console": "^0.11.0",
-		"nextras/dbal": "^5.0"
+		"nextras/dbal": "^5.0",
+		"nextras/orm": "^5.0"
 	},
 	"require-dev": {
 		"nette/tester": "^2.5",

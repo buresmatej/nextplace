@@ -2,6 +2,7 @@ extensions:
     console: Contributte\Console\DI\ConsoleExtension(%consoleMode%)
     migrations: Nextras\Migrations\Bridges\NetteDI\MigrationsExtension
     nextras.dbal: Nextras\Dbal\Bridges\NetteDI\DbalExtension
+    nextras.orm: Nextras\Orm\Bridges\NetteDI\OrmExtension
 
 migrations:
     dir: %appDir%/../migrations

@@ -41,3 +41,6 @@ nextras.dbal:
     database: nette_db
     username: root
     password: root
+
+nextras.orm:
+    model: App\Model\Db\Model
