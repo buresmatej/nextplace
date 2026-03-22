@@ -1,0 +1,10 @@
+extensions:
+    console: Contributte\Console\DI\ConsoleExtension(%consoleMode%)
+    migrations: Nextras\Migrations\Bridges\NetteDI\MigrationsExtension
+    nextras.dbal: Nextras\Dbal\Bridges\NetteDI\DbalExtension
+
+migrations:
+    dir: %appDir%/../migrations
+    driver: mysql
+    dbal: nextras
+    withDummyData: %debugMode%

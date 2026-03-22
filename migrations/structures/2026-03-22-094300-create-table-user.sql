@@ -1,0 +1,8 @@
+CREATE TABLE user (
+    id CHAR(36) NOT NULL DEFAULT (UUID()),
+    username VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
+);

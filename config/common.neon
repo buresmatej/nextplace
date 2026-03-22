@@ -11,9 +11,9 @@ application:
 
 
 database:
-	dsn: 'sqlite::memory:'
-	user:
-	password:
+	dsn: 'mysql:host=db;dbname=nette_db'
+	user: root
+	password: root
 
 
 latte:
@@ -33,3 +33,11 @@ di:
 	export:
 		parameters: no
 		tags: no
+
+nextras.dbal:
+    driver: mysqli
+    host: db
+    port: 3306
+    database: nette_db
+    username: root
+    password: root

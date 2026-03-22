@@ -19,7 +19,7 @@ services:
   db:
     image: mysql:8
     environment:
-      MYSQL_ROOT_PASSWORD: heslo
+      MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: nette_db
     volumes:
       - db_data:/var/lib/mysql

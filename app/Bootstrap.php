@@ -45,5 +45,12 @@ class Bootstrap
 		$configDir = $this->rootDir . '/config';
 		$this->configurator->addConfig($configDir . '/common.neon');
 		$this->configurator->addConfig($configDir . '/services.neon');
-	}
+        $this->configurator->addConfig($configDir . '/extensions.neon');
+    }
+
+    public function bootConsole(): Nette\DI\Container
+    {
+        $this->setupContainer();
+        return $this->configurator->createContainer();
+    }
 }
