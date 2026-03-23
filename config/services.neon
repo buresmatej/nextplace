@@ -1,5 +1,6 @@
 services:
 	- App\Core\RouterFactory::createRouter
+	- App\Model\Security\Auth\Authenticator
 
 
 search:

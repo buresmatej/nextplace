@@ -1,0 +1,126 @@
+/* Základní font (doporučuji importovat z Google Fonts např. 'Outfit' nebo 'Poppins') */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap');
+
+.travel-auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Pokud chceš formulář přes celou obrazovku, jinak uprav dle potřeby */
+    background-color: #f7f9f8; /* Lehký pískově/kamenitý nádech */
+    font-family: 'Outfit', sans-serif;
+    padding: 20px;
+}
+
+.sign-form-card {
+    background: #ffffff;
+    width: 100%;
+    max-width: 420px;
+    padding: 40px;
+    border-radius: 24px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.form-title {
+    color: #0f2c29; /* Hluboká lesní/noční obloha */
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    margin-top: 0;
+}
+
+.form-subtitle {
+    color: #64748b;
+    font-size: 14px;
+    margin-bottom: 32px;
+}
+
+.travel-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    text-align: left;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #334155;
+}
+
+.form-input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 15px;
+    color: #0f2c29;
+    background-color: #f8fafc;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+.form-input::placeholder {
+    color: #94a3b8;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #008080; /* Tyrkysová/oceánská barva */
+    background-color: #ffffff;
+    box-shadow: 0 0 0 4px rgba(0, 128, 128, 0.1);
+}
+
+.sign-btn {
+    width: 100%;
+    padding: 16px;
+    background-color: #008080; /* Tyrkysová/oceánská barva */
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    font-family: inherit;
+}
+
+.sign-btn:hover {
+    background-color: #006666;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 128, 128, 0.25);
+}
+
+.sign-btn:active {
+    transform: translateY(0);
+}
+
+.form-errors {
+    margin-top: -10px;
+    margin-bottom: 10px;
+}
+
+.form-error {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #e63946;
+    background-color: #fff0f1;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.form-error:last-child {
+    margin-bottom: 0;
+}

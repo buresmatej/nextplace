@@ -13,7 +13,7 @@ use Nextras\Orm\Entity\Entity;
  * @property string $username
  * @property string $email
  * @property string $password
- * @property DateTimeImmutable $registrationDate
+ * @property DateTimeImmutable $registrationDate {default 'now'}
  */
 class User extends Entity
 {
