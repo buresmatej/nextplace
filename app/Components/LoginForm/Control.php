@@ -6,11 +6,13 @@ namespace App\Components\LoginForm;
 
 use Nette\Application\UI\Control as UiControl;
 use Nette\Forms\Form;
+use Closure;
 
 class Control extends UiControl
 {
     public function __construct(
         private FormFactory $factory,
+        private Closure $onSuccess,
     ) {
     }
 
@@ -21,6 +23,9 @@ class Control extends UiControl
 
     public function createComponentLoginForm(): Form
     {
-        return $this->factory->create();
+        $form = $this->factory->create();
+        $form->onSuccess[] = $this->onSuccess;
+
+        return $form;
     }
 }
