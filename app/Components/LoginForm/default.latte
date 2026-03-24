@@ -1,7 +1,7 @@
 <div class="travel-auth-container">
     <div class="sign-form-card">
         <h2 class="form-title">Login</h2>
-        <p class="form-subtitle">Welcome back - login to continue!</p>
+        <p class="form-subtitle">Welcome back – log in to continue!</p>
 
         {form loginForm, class: 'travel-form'}
             <div class="form-group">
@@ -23,5 +23,9 @@
 
             {input submit, class: 'sign-btn', value: 'Login'}
         {/form}
+
+        <div class="form-footer">
+            <p>Don't have an account? <a href="{plink Sign:register}" class="footer-link">Register</a></p>
+        </div>
     </div>
 </div>

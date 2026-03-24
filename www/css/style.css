@@ -155,7 +155,7 @@
 .nav-links {
     display: flex;
     align-items: center;
-    gap: 24px;
+    gap: 20px;
 }
 
 .nav-link {
@@ -344,4 +344,44 @@
 
 .logout-btn:hover svg {
     transform: translateX(3px); /* Ikonka šipky po přejetí lehce "popojede" ven */
+}
+
+.form-footer {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.form-footer p {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0;
+}
+
+.footer-link {
+    color: #008080;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.footer-link:hover {
+    color: #006666;
+    text-decoration: underline;
+}
+
+.nav-links a[href*="Recommendation"] {
+    color: #008080;
+    position: relative;
+}
+
+.nav-links a[href*="Recommendation"]::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    right: -8px;
+    width: 5px;
+    height: 5px;
+    background-color: #fbbf24;
+    border-radius: 50%;
 }
