@@ -1,0 +1,387 @@
+/* Základní font (doporučuji importovat z Google Fonts např. 'Outfit' nebo 'Poppins') */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap');
+
+.travel-auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Pokud chceš formulář přes celou obrazovku, jinak uprav dle potřeby */
+    background-color: #f7f9f8; /* Lehký pískově/kamenitý nádech */
+    font-family: 'Outfit', sans-serif;
+    padding: 20px;
+}
+
+.sign-form-card {
+    background: #ffffff;
+    width: 100%;
+    max-width: 420px;
+    padding: 40px;
+    border-radius: 24px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.form-title {
+    color: #0f2c29; /* Hluboká lesní/noční obloha */
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    margin-top: 0;
+}
+
+.form-subtitle {
+    color: #64748b;
+    font-size: 14px;
+    margin-bottom: 32px;
+}
+
+.travel-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    text-align: left;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #334155;
+}
+
+.form-input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 15px;
+    color: #0f2c29;
+    background-color: #f8fafc;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+.form-input::placeholder {
+    color: #94a3b8;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #008080; /* Tyrkysová/oceánská barva */
+    background-color: #ffffff;
+    box-shadow: 0 0 0 4px rgba(0, 128, 128, 0.1);
+}
+
+.sign-btn {
+    width: 100%;
+    padding: 16px;
+    background-color: #008080; /* Tyrkysová/oceánská barva */
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    font-family: inherit;
+}
+
+.sign-btn:hover {
+    background-color: #006666;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 128, 128, 0.25);
+}
+
+.sign-btn:active {
+    transform: translateY(0);
+}
+
+.form-errors {
+    margin-top: -10px;
+    margin-bottom: 10px;
+}
+
+.form-error {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #e63946;
+    background-color: #fff0f1;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.form-error:last-child {
+    margin-bottom: 0;
+}
+
+.homepage-wrapper {
+    font-family: 'Outfit', sans-serif;
+    background-color: #f7f9f8;
+    color: #0f2c29;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Hlavička (Navbar) */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 5%;
+    background-color: transparent;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 22px;
+    font-weight: 700;
+    color: #008080;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #334155;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+
+.nav-link:hover {
+    color: #008080;
+}
+
+.nav-btn {
+    text-decoration: none;
+    background-color: #e2f1f1;
+    color: #008080;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.nav-btn:hover {
+    background-color: #008080;
+    color: white;
+}
+
+/* Hero Sekce */
+.hero-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 80px 20px 60px;
+}
+
+.hero-content {
+    max-width: 800px;
+}
+
+.hero-badge {
+    display: inline-block;
+    background-color: #e2f1f1;
+    color: #006666;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 24px;
+}
+
+.hero-title {
+    font-size: 54px;
+    line-height: 1.1;
+    font-weight: 700;
+    color: #0f2c29;
+    margin: 0 0 20px;
+}
+
+.hero-description {
+    font-size: 18px;
+    color: #64748b;
+    line-height: 1.6;
+    margin-bottom: 40px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hero-actions {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.cta-btn {
+    text-decoration: none;
+    padding: 16px 32px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.primary-btn {
+    background-color: #008080;
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 128, 128, 0.2);
+}
+
+.primary-btn:hover {
+    background-color: #006666;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 128, 128, 0.3);
+}
+
+.secondary-btn {
+    background-color: white;
+    color: #0f2c29;
+    border: 2px solid #e2e8f0;
+}
+
+.secondary-btn:hover {
+    border-color: #008080;
+    color: #008080;
+}
+
+/* Karty s funkcemi */
+.features-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    padding: 40px 5%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.feature-card {
+    background: white;
+    padding: 30px;
+    border-radius: 24px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
+    transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.feature-icon {
+    font-size: 40px;
+    margin-bottom: 20px;
+}
+
+.feature-title {
+    font-size: 20px;
+    color: #0f2c29;
+    margin: 0 0 12px;
+}
+
+.feature-text {
+    color: #64748b;
+    font-size: 15px;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Responzivita pro mobily */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 36px;
+    }
+    .hero-actions {
+        flex-direction: column;
+    }
+    .cta-btn {
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
+
+.logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: #64748b; /* Decentní šedo-modrá */
+    font-size: 15px;
+    font-weight: 600;
+    padding: 10px 16px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    background-color: transparent;
+}
+
+.logout-btn:hover {
+    background-color: #fff0f1; /* Velmi světlá červená z error stylu */
+    color: #e63946; /* Výraznější červená na ikonu a text */
+}
+
+.logout-btn svg {
+    transition: transform 0.3s ease;
+}
+
+.logout-btn:hover svg {
+    transform: translateX(3px); /* Ikonka šipky po přejetí lehce "popojede" ven */
+}
+
+.form-footer {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.form-footer p {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0;
+}
+
+.footer-link {
+    color: #008080;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.footer-link:hover {
+    color: #006666;
+    text-decoration: underline;
+}
+
+.nav-links a[href*="Recommendation"] {
+    color: #008080;
+    position: relative;
+}
+
+.nav-links a[href*="Recommendation"]::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    right: -8px;
+    width: 5px;
+    height: 5px;
+    background-color: #fbbf24;
+    border-radius: 50%;
+}
