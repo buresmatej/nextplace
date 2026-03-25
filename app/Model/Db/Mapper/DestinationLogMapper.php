@@ -6,6 +6,7 @@ namespace App\Model\Db\Mapper;
 
 use Nextras\Orm\Mapper\Dbal\DbalMapper;
 
-class UserMapper extends DbalMapper
+class DestinationLogMapper extends DbalMapper
 {
+
 }

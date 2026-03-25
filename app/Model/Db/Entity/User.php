@@ -7,6 +7,7 @@ namespace App\Model\Db\Entity;
 
 use DateTimeImmutable;
 use Nextras\Orm\Entity\Entity;
+use Nextras\Orm\Relationships\OneHasMany;
 
 /**
  * @property string $id {primary}
@@ -14,6 +15,7 @@ use Nextras\Orm\Entity\Entity;
  * @property string $email
  * @property string $password
  * @property DateTimeImmutable $registrationDate {default 'now'}
+ * @property OneHasMany<DestinationLog> $destinationLogs {1:m DestinationLog::$user}
  */
 class User extends Entity
 {
