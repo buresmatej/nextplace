@@ -385,3 +385,45 @@
     background-color: #fbbf24;
     border-radius: 50%;
 }
+.star-rating {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: #f8fafc;
+    padding: 15px;
+    border-radius: 12px;
+    border: 2px solid #e2e8f0;
+    align-items: center;
+}
+
+.stars-row {
+    display: flex;
+    gap: 8px;
+}
+
+.star {
+    font-size: 2.5rem;
+    color: #cbd5e1; /* Základní šedá */
+    cursor: pointer;
+    transition: transform 0.1s ease, color 0.15s ease;
+    line-height: 1;
+}
+
+/* Třídy, které přidává tvůj JavaScript */
+.star.selected {
+    color: #f5a623; /* Tvoje oranžová pro kliknuté */
+}
+
+.star.hovered {
+    color: #ffca28; /* Trochu světlejší pro hover efekt */
+}
+
+.star:hover {
+    transform: scale(1.15);
+}
+
+/* Styl pro textarea */
+.form-textarea {
+    min-height: 120px;
+    resize: vertical;
+}

@@ -1,7 +1,7 @@
 CREATE TABLE destination_log (
     id CHAR(36) NOT NULL DEFAULT (UUID()),
     user_id CHAR(36) NOT NULL,
-    country_id VARCHAR(5) NOT NULL,
+    country_id CHAR(5) NOT NULL,
     rating TINYINT UNSIGNED NOT NULL,
     note TEXT NULL,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
