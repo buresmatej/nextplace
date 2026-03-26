@@ -13,6 +13,11 @@ trait PresenterTrait
 
     public function createComponentRegisterFormControl():  Control
     {
-        return $this->registerFormControlFactory->create();
+        return $this->registerFormControlFactory->create($this->onRegisterFormSuccess(...));
+    }
+
+    public function onRegisterFormSuccess(): void
+    {
+        $this->redirect('Home:default');
     }
 }

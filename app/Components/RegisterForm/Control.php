@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Components\RegisterForm;
 
+use Closure;
 use Nette\Application\UI\Control as UiControl;
 use Nette\Forms\Form;
 
@@ -11,6 +12,7 @@ class Control extends UiControl
 {
     public function __construct(
         private FormFactory $factory,
+        private Closure $onSuccess,
     ) {
     }
 
@@ -21,6 +23,9 @@ class Control extends UiControl
 
     public function createComponentRegisterForm(): Form
     {
-        return $this->factory->create();
+        $form = $this->factory->create();
+        $form->onSuccess[] = $this->onSuccess;
+
+        return $form;
     }
 }
