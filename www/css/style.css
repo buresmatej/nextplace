@@ -1,6 +1,22 @@
 /* Základní font (doporučuji importovat z Google Fonts např. 'Outfit' nebo 'Poppins') */
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap');
 
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Outfit', sans-serif; /* Font pro všechno */
+    background-color: #f7f9f8;
+    color: #0f2c29;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* 2. Zajištění, že font dědí i formuláře a odkazy */
+input, button, select, textarea, a {
+    font-family: inherit;
+}
+
+
+
 .travel-auth-container {
     display: flex;
     justify-content: center;
@@ -134,13 +150,13 @@
     flex-direction: column;
 }
 
-/* Hlavička (Navbar) */
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 20px 5%;
-    background-color: transparent;
+    max-width: 1400px; /* Aby nebyl na obřích monitorech roztažený do krajů */
+    margin: 0 auto;
 }
 
 .logo {
@@ -427,3 +443,188 @@
     min-height: 120px;
     resize: vertical;
 }
+
+
+
+/* Kontejner pro vycentrování a font */
+.journal-main-wrapper {
+    max-width: 1200px;
+    margin: 60px auto;
+    padding: 0 40px;
+    font-family: 'Outfit', sans-serif; /* Sjednocený font */
+}
+
+.journal-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 50px;
+    gap: 20px;
+}
+
+.page-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #0f2c29;
+    margin: 0 0 8px 0;
+}
+
+.page-subtitle {
+    color: #64748b;
+    font-size: 16px;
+}
+
+/* Moderní a responzivní Grid karet */
+.journal-cards-grid {
+    display: grid;
+    /* Karty budou mít minimálně 300px,
+       ale díky auto-fill se jich vedle sebe naskládá jen tolik, kolik se vejde,
+       neroztáhnou se přes celou šířku řádku */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+    justify-content: start; /* Zarovná karty doleva */
+}
+
+/* Samotná karta */
+.destination-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 24px;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+}
+
+.destination-card:hover {
+    transform: translateY(-6px);
+    border-color: #008080;
+    box-shadow: 0 15px 35px rgba(0, 128, 128, 0.08);
+}
+
+/* Horní linka na kartě (Vlajka a Kontinent) */
+.card-top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.flag-icon {
+    font-size: 32px;
+    line-height: 1;
+}
+
+.continent-tag {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #008080;
+    background: #f0fdfa;
+    padding: 4px 10px;
+    border-radius: 100px;
+    font-weight: 700;
+}
+
+/* Obsah karty */
+.destination-name {
+    font-size: 20px;
+    font-weight: 700;
+    color: #0f2c29;
+    margin: 0 0 4px 0;
+}
+
+.log-date {
+    font-size: 13px;
+    color: #94a3b8;
+    margin-bottom: 12px;
+    display: block;
+}
+
+/* Minimalistické hvězdičky */
+.rating-display {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 16px;
+}
+
+.star-icon {
+    font-size: 20px;
+    color: #e2e8f0; /* Prázdná šedá */
+}
+
+.star-icon.filled {
+    color: #f5a623; /* Zlatá pro hodnocení */
+}
+
+/* Poznámka */
+.note-preview {
+    border-top: 1px solid #f1f5f9;
+    padding-top: 16px;
+    margin-top: auto; /* Zatlačí poznámku vždy dolů */
+}
+
+.note-preview p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #475569;
+    margin: 0;
+    font-style: italic;
+}
+
+/* Prázdný stav */
+.empty-journal {
+    text-align: center;
+    padding: 60px 0;
+    color: #64748b;
+}
+
+
+.add-trip-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #008080; /* Tvoja tyrkysová */
+    color: white;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 14px;
+    font-weight: 600;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 128, 128, 0.15);
+    white-space: nowrap;
+}
+
+.add-trip-btn:hover {
+    background-color: #006666;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 128, 128, 0.25);
+}
+
+.add-trip-btn svg {
+    transition: transform 0.3s ease;
+}
+
+.add-trip-btn:hover svg {
+    transform: rotate(90deg); /* Malý efekt pri hoveri */
+}
+
+.home-btn {
+    text-decoration: none;
+}
+
+@media (max-width: 600px) {
+    .journal-page-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .add-trip-btn {
+        width: 100%;
+        justify-content: center;
+        box-sizing: border-box;
+    }
+}
+

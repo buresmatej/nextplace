@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Components\DestinationLogForm;
+namespace App\Components\DestinationLog\Form;
 
 
 use App\Model\Db\Entity\DestinationLog;
@@ -42,6 +42,7 @@ class FormFactory
 
         return $form;
     }
+
 
     public function onSuccess(Form $form)
     {

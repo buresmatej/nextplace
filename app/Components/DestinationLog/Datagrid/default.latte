@@ -1,0 +1,38 @@
+<div class="journal-main-wrapper">
+    <header class="journal-page-header">
+        <div class="header-text">
+            <h1 class="page-title">Your destination log</h1>
+            <p class="page-subtitle">A collection of your {count($items)} explored destinations.</p>
+        </div>
+        <a href="{plink DestinationLog:create}" class="add-trip-btn">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span>Log trip</span>
+        </a>
+    </header>
+
+    <div class="journal-cards-grid">
+        {foreach $items as $item}
+            <article class="destination-card">
+                <div class="card-top-bar">
+                    <span class="flag-icon">{$item->country->flagEmoji}</span>
+                    <span class="continent-tag">{$item->country->continent}</span>
+                </div>
+
+                <div class="card-content">
+                    <h2 class="destination-name">{$item->country->name}</h2>
+                    <time class="log-date">{$item->createdAt|date:'F Y'}</time>
+
+                    <div class="rating-display">
+                        {for $i = 1; $i <= 5; $i++}
+                            <span class="star-icon {if $i <= $item->rating}filled{/if}">&#9733;</span>
+                        {/for}
+                    </div>
+
+                    <div class="note-preview" n:if="$item->note">
+                        <p>“{$item->note|truncate:110}”</p>
+                    </div>
+                </div>
+            </article>
+        {/foreach}
+    </div>
+</div>

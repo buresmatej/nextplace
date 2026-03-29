@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Components\DestinationLogForm;
+namespace App\Components\DestinationLog\Datagrid;
 
 interface ControlFactory
 {

@@ -15,12 +15,15 @@ class Authorizator
 
         $acl->addResource('Sign');
 
+        $acl->addResource('DestinationLog');
+
         $acl->deny('guest');
         $acl->allow('guest', 'Sign', ['in', 'up']);
 
 
         $acl->deny('user', 'Sign', ['in', 'up']);
         $acl->allow('user', 'Sign', 'out');
+        $acl->allow('user', 'DestinationLog', ['seeDatagrid', 'create']);
 
         $acl->allow('admin');
 
