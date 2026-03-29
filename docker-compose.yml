@@ -17,8 +17,12 @@ services:
       dockerfile: Dockerfile
     volumes:
       - .:/var/www/html
+      - /var/www/html/vendor  # chrání vendor před přepsáním
+      - /var/www/html/temp    # chrání temp před přepsáním
+      - /var/www/html/log     # chrání log před přepsáním
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   db:
     image: mysql:8
@@ -27,6 +31,12 @@ services:
       MYSQL_DATABASE: nette_db
     volumes:
       - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
 
   phpmyadmin:
     image: phpmyadmin
@@ -42,7 +52,7 @@ services:
     volumes:
       - ollama_data:/root/.ollama
     healthcheck:
-      test: [ "CMD", "ollama", "list" ]
+      test: ["CMD", "ollama", "list"]
       interval: 5s
       timeout: 5s
       retries: 10
