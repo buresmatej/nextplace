@@ -1,0 +1,35 @@
+<div class="travel-auth-container">
+    <div class="sign-form-card log-card">
+        <h2 class="form-title">Log your journey</h2>
+        <p class="form-subtitle">Capture the memories from your last trip.</p>
+
+        {form destinationLogForm, class: 'travel-form'}
+            <div class="form-group">
+                {label country, class: 'form-label' /}
+                {input country, class: 'form-input', placeholder: 'Where did you go?'}
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">How was it?</label>
+                <div class="star-rating">
+                    <div class="stars-row">
+                        {foreach [1,2,3,4,5] as $star}
+                            <span class="star" data-value="{$star}">&#9733;</span>
+                        {/foreach}
+                    </div>
+                    {input rating}
+                </div>
+                <p class="form-error" n:if="$form['rating']->hasErrors()">{inputError rating}</p>
+            </div>
+
+            <div class="form-group">
+                {label note, class: 'form-label' /}
+                {input note, class: 'form-input form-textarea', placeholder: 'Write a few words about your experience...'}
+            </div>
+
+            {input submit, class: 'sign-btn', value: 'Save Journey'}
+        {/form}
+    </div>
+</div>
+
+<script src={="/js/star_rating.js"}></script>

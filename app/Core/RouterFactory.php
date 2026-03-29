@@ -16,6 +16,8 @@ final class RouterFactory
         $router->addRoute('register', 'Sign:register');
         $router->addRoute('login', 'Sign:login');
         $router->addRoute('out', 'Sign:out');
+        $router->addRoute('destination-logs/create', 'DestinationLog:create');
+        $router->addRoute('destination-logs', 'DestinationLog:datagrid');
         $router->addRoute('<presenter>/<action>[/<id>]', 'Home:default');
         return $router;
 	}

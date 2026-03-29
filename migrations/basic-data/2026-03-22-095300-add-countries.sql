@@ -1,4 +1,4 @@
-INSERT INTO countries (code, name, continent, flag_emoji) VALUES
+INSERT INTO country (id, name, continent, flag_emoji) VALUES
     ('CZ', 'Czech Republic',   'Europe',        '🇨🇿'),
     ('SK', 'Slovakia',         'Europe',        '🇸🇰'),
     ('AT', 'Austria',          'Europe',        '🇦🇹'),
