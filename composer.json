@@ -24,7 +24,8 @@
 		"contributte/console": "^0.11.0",
 		"nextras/dbal": "^5.0",
 		"nextras/orm": "^5.0",
-		"guzzlehttp/guzzle": "^7.10"
+		"guzzlehttp/guzzle": "^7.10",
+		"ramsey/uuid": "^4.9"
 	},
 	"require-dev": {
 		"nette/tester": "^2.5",

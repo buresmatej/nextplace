@@ -6,7 +6,6 @@ declare(strict_types=1);
 namespace App\Model\Db\Entity;
 
 use DateTimeImmutable;
-use Nextras\Orm\Entity\Entity;
 use Nextras\Orm\Relationships\OneHasMany;
 
 /**

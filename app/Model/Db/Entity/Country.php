@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Model\Db\Entity;
 
-use Nextras\Orm\Entity\Entity;
 
 /**
  * @property string $id {primary}

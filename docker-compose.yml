@@ -2,12 +2,11 @@ version: "3.9"
 
 services:
   nginx:
-    image: nginx:alpine
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
     ports:
       - "${PORT}:80"
-    volumes:
-      - .:/var/www/html
-      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - php
 
@@ -15,44 +14,40 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    volumes:
-      - .:/var/www/html
-      - /var/www/html/vendor  # chrání vendor před přepsáním
-      - /var/www/html/temp    # chrání temp před přepsáním
-      - /var/www/html/log     # chrání log před přepsáním
     depends_on:
       db:
         condition: service_healthy
+      ollama:
+        condition: service_healthy
 
   db:
-    image: mysql:8
+    image: postgres:16-alpine
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: nette_db
-    volumes:
-      - db_data:/var/lib/mysql
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: nette_db
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      test: ["CMD-SHELL", "pg_isready -U root -d nette_db"]
       interval: 5s
       timeout: 5s
       retries: 10
       start_period: 10s
 
-  phpmyadmin:
-    image: phpmyadmin
+  # Alternativa k phpMyAdmin pro Postgres je pgAdmin
+  pgadmin:
+    image: dpage/pgadmin4
     ports:
       - "8080:80"
     environment:
-      PMA_HOST: db
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
 
   ollama:
     image: ollama/ollama
     ports:
       - "11434:11434"
-    volumes:
-      - ollama_data:/root/.ollama
     healthcheck:
-      test: ["CMD", "ollama", "list"]
+      test: [ "CMD", "ollama", "list" ]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -61,14 +56,8 @@ services:
     image: ollama/ollama
     environment:
       - OLLAMA_HOST=http://ollama:11434
-    volumes:
-      - ollama_data:/root/.ollama
     depends_on:
       ollama:
         condition: service_healthy
     command: pull gemma3:4b
     restart: "no"
-
-volumes:
-  db_data:
-  ollama_data:

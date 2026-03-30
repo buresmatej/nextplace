@@ -6,22 +6,23 @@ RUN composer install --no-dev --prefer-dist --no-interaction
 FROM php:8.4-fpm
 WORKDIR /var/www/html
 
-RUN docker-php-ext-install pdo pdo_mysql mysqli
+# Instalace závislostí pro Postgres a rozšíření pdo_pgsql
+RUN apt-get update && apt-get install -y libpq-dev \
+    && docker-php-ext-install pdo pdo_pgsql pgsql
 
 COPY . .
 COPY --from=vendor /app/vendor ./vendor
 
 RUN rm -rf /var/www/html/temp/cache \
     && mkdir -p /var/www/html/temp /var/www/html/log \
-    && chown -R nobody:nogroup /var/www/html/temp \
-    && chown -R nobody:nogroup /var/www/html/log
+    && chmod -R 777 /var/www/html/temp /var/www/html/log
 
 RUN sed -i 's/user = www-data/user = nobody/g' /usr/local/etc/php-fpm.d/www.conf && \
     sed -i 's/group = www-data/group = nogroup/g' /usr/local/etc/php-fpm.d/www.conf && \
     sed -i 's/listen = 127.0.0.1:9000/listen = 0.0.0.0:9000/g' /usr/local/etc/php-fpm.d/www.conf
 
 COPY entrypoint.sh /entrypoint.sh
-RUN sed -i 's/\r//' /entrypoint.sh \
+RUN sed -i 's/\r$//' /entrypoint.sh \
     && chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]

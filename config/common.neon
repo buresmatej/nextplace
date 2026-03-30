@@ -10,10 +10,10 @@ application:
 	mapping: App\UI\*\**Presenter
 
 
-database:
-	dsn: 'mysql:host=db;dbname=nette_db'
-	user: root
-	password: root
+#database:
+	#dsn: 'pgsql:host=db;port=5432;dbname=nette_db'
+	#user: root
+#	password: root
 
 
 latte:
@@ -35,12 +35,15 @@ di:
 		tags: no
 
 nextras.dbal:
-    driver: mysqli
+    driver: pgsql
     host: db
-    port: 3306
+    port: 5432
     database: nette_db
     username: root
     password: root
-
+    newConnection: yes
+    simpleStorage: yes
+    connection:
+            charset: UTF8
 nextras.orm:
     model: App\Model\Db\Model

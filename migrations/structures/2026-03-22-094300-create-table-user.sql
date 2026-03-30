@@ -1,8 +1,7 @@
-CREATE TABLE user (
-    id CHAR(36) NOT NULL DEFAULT (UUID()),
+CREATE TABLE "user" (
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     username VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
-    registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id)
+    registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

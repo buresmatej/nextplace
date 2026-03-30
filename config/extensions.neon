@@ -6,6 +6,6 @@ extensions:
 
 migrations:
     dir: %appDir%/../migrations
-    driver: mysql
+    driver: pgsql
     dbal: nextras
     withDummyData: %debugMode%
