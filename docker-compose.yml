@@ -17,12 +17,14 @@ services:
     environment:
       AI_API: "${OPENAI_BASE_URL}"
       AI_MODEL: "${AI_MODEL}"
-      OPENAI_API_KEY: "{OPENAI_API_KEY}"
+      OPENAI_API_KEY: "${OPENAI_API_KEY}" # Opravil jsem ti tady překlep: chyběl znak $
     depends_on:
       db:
         condition: service_healthy
-      # ollama:
-      #   condition: service_healthy
+    # Přidej tento blok:
+    tmpfs:
+      - /var/www/html/temp
+      - /var/www/html/log
 
   db:
     image: postgres:16-alpine

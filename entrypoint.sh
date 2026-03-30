@@ -10,6 +10,8 @@ done
 
 echo "Postgres ready, executing migrations..."
 php bin/console migrations:reset --no-interaction
-rm -rf /var/www/html/temp/cache
+
+# Bezpečné smazání obsahu tempu bez smazání samotné složky (přidáno || true pro ignorování případných chyb)
+rm -rf /var/www/html/temp/* || true
 
 exec php-fpm
