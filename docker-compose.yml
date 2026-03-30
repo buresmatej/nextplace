@@ -14,11 +14,15 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    environment:
+      AI_API: "${OPENAI_BASE_URL}"
+      AI_MODEL: "${AI_MODEL}"
+      OPENAI_API_KEY: "{OPENAI_API_KEY}"
     depends_on:
       db:
         condition: service_healthy
-      ollama:
-        condition: service_healthy
+      # ollama:                <-- Odstraněno, aby PHP nečekalo na smazanou službu
+      #   condition: service_healthy
 
   db:
     image: postgres:16-alpine
@@ -33,31 +37,30 @@ services:
       retries: 10
       start_period: 10s
 
-  # Alternativa k phpMyAdmin pro Postgres je pgAdmin
-  pgadmin:
-    image: dpage/pgadmin4
-    ports:
-      - "8080:80"
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: root
+#  pgadmin:
+#    image: dpage/pgadmin4
+#    ports:
+#      - "8080:80"
+#    environment:
+#      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+#      PGADMIN_DEFAULT_PASSWORD: root
 
-  ollama:
-    image: ollama/ollama
-    ports:
-      - "11434:11434"
-    healthcheck:
-      test: [ "CMD", "ollama", "list" ]
-      interval: 5s
-      timeout: 5s
-      retries: 10
+#  ollama:
+#    image: ollama/ollama
+#    ports:
+#      - "11434:11434"
+#    healthcheck:
+#      test: [ "CMD", "ollama", "list" ]
+#      interval: 5s
+#      timeout: 5s
+#      retries: 10
 
-  ollama-pull:
-    image: ollama/ollama
-    environment:
-      - OLLAMA_HOST=http://ollama:11434
-    depends_on:
-      ollama:
-        condition: service_healthy
-    command: pull gemma3:4b
-    restart: "no"
+#  ollama-pull:
+#    image: ollama/ollama
+#    environment:
+#      - OLLAMA_HOST=http://ollama:11434
+#    depends_on:
+#      ollama:
+#        condition: service_healthy
+#    command: pull gemma3:4b
+#    restart: "no"

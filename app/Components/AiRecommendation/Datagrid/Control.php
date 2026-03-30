@@ -40,9 +40,13 @@ class Control extends UiControl
 
             $prompt = sprintf('You are a travel advisor. The user has visited the following countries and rated them:\n{$s}\n\nBased on their preferences, recommend 3 countries they should visit next.\nRules:\n- Respond ONLY with ISO 3166-1 alpha-2 country codes\n- Separate them with commas\n- No spaces, no explanation, no markdown, no punctuation, nothing else\n- Output must match exactly this format: XX,XX,XX', $list);
 
-            $response = $client->post('http://ollama:11434/api/generate', [
+            $response = $client->post(getenv('AI_API'), [
+                'headers' => [
+                    'Content-Type'  => 'application/json',
+                    'Authorization'        => 'Bearer' . getenv('OPENAI_API_KEY'),
+                ],
                 'json' => [
-                    'model'  => 'gemma3:4b',
+                    'model'  => getenv('AI_MODEL'),
                     'prompt' => $prompt,
                     'stream' => false,
                 ],
