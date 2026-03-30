@@ -1,6 +1,10 @@
 #!/bin/sh
+set -ex
+
 
 echo "Setting rights..."
+chown -R nobody:nogroup /var/www/html/temp
+chown -R nobody:nogroup /var/www/html/log
 chmod -R 777 /var/www/html/temp
 chmod -R 777 /var/www/html/log
 
@@ -12,5 +16,6 @@ done
 
 echo "MySQL ready, executing migrations..."
 php bin/console migrations:reset --no-interaction
+rm -rf /var/www/html/temp/cache
 
 exec php-fpm
