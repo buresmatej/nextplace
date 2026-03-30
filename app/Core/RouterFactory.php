@@ -20,6 +20,7 @@ final class RouterFactory
         $router->addRoute('destination-logs', 'DestinationLog:datagrid');
         $router->addRoute('ping', 'Api:ping');
         $router->addRoute('status', 'Api:status');
+        $router->addRoute('recommendation', 'Ai:recommendation');
         $router->addRoute('<presenter>/<action>[/<id>]', 'Home:default');
         return $router;
 	}

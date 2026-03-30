@@ -1,0 +1,40 @@
+<div class="journal-main-wrapper">
+    <header class="journal-page-header">
+        <div class="header-text">
+            <h1 class="page-title">Recommended for You</h1>
+            <p class="page-subtitle">Based on your travel history, we think you'll love these places.</p>
+        </div>
+    </header>
+
+    {if !empty($items)}
+        <div class="journal-cards-grid">
+            {foreach $items as $item}
+                <article class="destination-card recommendation-card">
+                    <div class="card-top-bar">
+                        <span class="flag-icon">{$item->flagEmoji}</span>
+                        <span class="ai-badge">AI Match ✨</span>
+                    </div>
+
+                    <div class="card-content">
+                        <h2 class="destination-name">{$item->name}</h2>
+                        <span class="continent-tag">{$item->continent}</span>
+
+
+                    </div>
+                </article>
+            {/foreach}
+        </div>
+    {else}
+        <div class="empty-state-container">
+            <div class="empty-icon">🌎</div>
+            <h2 class="empty-title">No recommendations yet</h2>
+            <p class="empty-text">
+                To give you personalized tips, we first need to know where you've been.
+                Start by logging your first destination!
+            </p>
+            <a href="{plink DestinationLog:create}" class="add-trip-btn">
+                + Log your first trip
+            </a>
+        </div>
+    {/if}
+</div>
