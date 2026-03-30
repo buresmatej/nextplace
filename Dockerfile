@@ -13,9 +13,6 @@ RUN apt-get update && apt-get install -y libpq-dev \
 COPY . .
 COPY --from=vendor /app/vendor ./vendor
 
-RUN rm -rf /var/www/html/temp/cache \
-    && mkdir -p /var/www/html/temp /var/www/html/log \
-    && chmod -R 777 /var/www/html/temp /var/www/html/log
 
 RUN sed -i 's/user = www-data/user = nobody/g' /usr/local/etc/php-fpm.d/www.conf && \
     sed -i 's/group = www-data/group = nogroup/g' /usr/local/etc/php-fpm.d/www.conf && \

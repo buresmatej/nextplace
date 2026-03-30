@@ -1,17 +1,21 @@
 #!/bin/sh
 set -ex
 
+# Musíme vytvořit složku v /tmp ručně pro jistotu před spuštěním konzole
+mkdir -p /tmp/nette_temp /tmp/nette_log
+chmod -R 777 /tmp/nette_temp /tmp/nette_log
+
 echo "Waiting for Postgres..."
-# Test připojení pomocí PHP PDO k Postgresu
 until php -r "new PDO('pgsql:host=db;port=5432;dbname=nette_db', 'root', 'root');" 2>/dev/null; do
   echo "Postgres not ready..."
   sleep 2
 done
 
 echo "Postgres ready, executing migrations..."
+# Spustíme migrace (použijí temp v /tmp díky změně v Bootstrapu)
 php bin/console migrations:reset --no-interaction
 
-# Bezpečné smazání obsahu tempu bez smazání samotné složky (přidáno || true pro ignorování případných chyb)
-rm -rf /var/www/html/temp/* || true
+# Promazání cache v /tmp (nepovinné, ale čistší)
+rm -rf /tmp/nette_temp/* || true
 
 exec php-fpm
