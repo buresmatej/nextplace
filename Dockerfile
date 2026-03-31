@@ -14,9 +14,10 @@ COPY . .
 COPY --from=vendor /app/vendor ./vendor
 
 
-RUN sed -i 's/user = www-data/user = nobody/g' /usr/local/etc/php-fpm.d/www.conf && \
-    sed -i 's/group = www-data/group = nogroup/g' /usr/local/etc/php-fpm.d/www.conf && \
-    sed -i 's/listen = 127.0.0.1:9000/listen = 0.0.0.0:9000/g' /usr/local/etc/php-fpm.d/www.conf
+#RUN sed -i 's/user = www-data/user = nobody/g' /usr/local/etc/php-fpm.d/www.conf && \
+#sed -i 's/group = www-data/group = nogroup/g' /usr/local/etc/php-fpm.d/www.conf && \
+#    sed -i 's/listen = 127.0.0.1:9000/listen = 0.0.0.0:9000/g' /usr/local/etc/php-fpm.d/www.conf
+RUN sed -i 's/listen = 127.0.0.1:9000/listen = 0.0.0.0:9000/g' /usr/local/etc/php-fpm.d/www.conf
 
 COPY entrypoint.sh /entrypoint.sh
 RUN sed -i 's/\r$//' /entrypoint.sh \
