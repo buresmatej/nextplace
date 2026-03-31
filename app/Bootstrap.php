@@ -41,7 +41,7 @@ class Bootstrap
     {
         // Na školním serveru doporučuji vypnout DebugMode (false),
         // Tracy logy teď najdeš v /tmp/nette_log v kontejneru
-        $this->configurator->setDebugMode(false);
+        $this->configurator->setDebugMode(true);
 
         $this->configurator->createRobotLoader()
             ->addDirectory(__DIR__)
