@@ -1,15 +1,17 @@
 FROM nginx:alpine
 
-# Vyčištění defaultů
+# Vyčištění a kopírování konfigu
 RUN rm -rf /etc/nginx/conf.d/* /etc/nginx/nginx.conf
-
-# Kopírování tvé konfigurace a webu
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
-COPY www /var/www/html/www
 
-# Vytvoření logů s plnými právy
-RUN touch /tmp/access.log /tmp/error.log && chmod 777 /tmp/access.log /tmp/error.log
+# Kopírování webu do /app/www (shodné s root v nginx.conf)
+COPY www /app/www
 
-# Obejít startovací skripty, které dělají chown
+# Vytvoření všech dočasných složek a logů s plnými právy
+RUN mkdir -p /tmp/client_temp /tmp/proxy_temp /tmp/fastcgi_temp /tmp/uwsgi_temp /tmp/scgi_temp && \
+    touch /tmp/access.log /tmp/error.log && \
+    chmod -R 777 /tmp
+
+# Přímý start bez problematických entrypoint skriptů
 ENTRYPOINT []
-CMD ["nginx", "-g", "daemon off; user root;"]
+CMD ["nginx", "-g", "daemon off;"]
