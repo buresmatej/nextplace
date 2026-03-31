@@ -1,15 +1,25 @@
+# --- KROK 1: Stáhneme závislosti pomocí Composeru ---
+FROM composer:2 AS composer_stage
+WORKDIR /app
+COPY composer.json composer.lock ./
+# Stáhneme vendor (bez dev závislostí pro rychlost a čistotu)
+RUN composer install --no-dev --optimize-autoloader --no-interaction
+
+# --- KROK 2: Finální PHP obraz ---
 FROM php:8.4-fpm-alpine
 
-# 1. Instalace knihoven a obou ovladačů pro Postgres (PDO i základní pgsql pro migrace)
 RUN apk add --no-cache libpq-dev && \
     docker-php-ext-install pdo_pgsql pgsql
 
 WORKDIR /app
 
-# 2. Kopírování kódu (předpokládáme, že vendor už máš v projektu nebo se buildí jinde)
+# Kopírujeme kód tvé aplikace
 COPY . .
 
-# 3. Konfigurace PHP-FPM: Přesun PID a logů do /tmp a nastavení uživatele na root
+# Kopírujeme SLOŽKU VENDOR z prvního kroku
+COPY --from=composer_stage /app/vendor ./vendor
+
+# Konfigurace FPM (stejná jako minule)
 RUN \
     sed -i '/^pid =/d' /usr/local/etc/php-fpm.conf && \
     sed -i '/^error_log =/d' /usr/local/etc/php-fpm.conf && \
@@ -19,7 +29,6 @@ RUN \
     sed -i '/^access.log =/d' /usr/local/etc/php-fpm.d/*.conf && \
     sed -i 's/listen = 127.0.0.1:9000/listen = 0.0.0.0:9000/g' /usr/local/etc/php-fpm.d/www.conf
 
-# 4. Nastavení entrypointu
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
