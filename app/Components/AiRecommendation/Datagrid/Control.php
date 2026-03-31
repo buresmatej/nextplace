@@ -43,18 +43,21 @@ class Control extends UiControl
             $response = $client->post(getenv('AI_API'), [
                 'headers' => [
                     'Content-Type'  => 'application/json',
-                    'Authorization'        => 'Bearer' . getenv('OPENAI_API_KEY'),
+                    'Authorization' => 'Bearer ' . getenv('OPENAI_API_KEY'),
                 ],
                 'json' => [
-                    'model'  => getenv('AI_MODEL'),
-                    'prompt' => $prompt,
-                    'stream' => false,
+                    'model'    => getenv('AI_MODEL'),
+                    'messages' => [
+                        ['role' => 'user', 'content' => $prompt],
+                    ],
+                    'stream'   => false,
                 ],
             ]);
 
-            $response = Json::decode($response->getBody()->getContents(), true);
-            $countries = trim($response['response']);
-            $codes = explode(',', $countries);
+            $data = Json::decode($response->getBody()->getContents(), true);
+            $countriesString = $data['choices'][0]['message']['content'] ?? '';
+            $countriesString = trim($countriesString);
+            $codes = array_map('trim', explode(',', $countriesString));
             $items = $this->countryRepository->findBy(['id' => $codes])->fetchAll();
         }
         $this->template->items = $items;
