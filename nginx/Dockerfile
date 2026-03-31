@@ -1,16 +1,19 @@
 FROM nginx:alpine
 
-# 1. Odstraníme defaultní konfigurace
-RUN rm -f /etc/nginx/conf.d/default.conf
+# 1. Vymažeme defaultní konfigy, aby nás nebrzdily
+RUN rm -rf /etc/nginx/conf.d/* /etc/nginx/nginx.conf
 
-# 2. Kopírujeme tvůj nginx.conf jako hlavní konfiguraci
+# 2. Kopírujeme tvůj vyladěný nginx.conf
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 
-# 3. Kopírujeme statické soubory
+# 3. Kopírujeme statiku
 COPY www /var/www/html/www
 
-# KLÍČOVÝ KROK:
-# Aby Nginx nezkoušel chown, musíme mu vnutit, že ty složky už existují pod ním.
-# Ale protože chown nejde, prostě ty složky, co chce Nginx ovládat, dopředu vyrobíme.
+# 4. Vytvoříme složky v /tmp dopředu a dáme jim práva
 RUN mkdir -p /tmp/client_temp /tmp/proxy_temp /tmp/fastcgi_temp /tmp/uwsgi_temp /tmp/scgi_temp && \
     chmod -R 777 /tmp
+
+# KLÍČOVÝ KROK: Přepíšeme ENTRYPOINT na prázdno a spustíme nginx přímo.
+# Tím se úplně vyhneme těm skriptům, co dělají chown.
+ENTRYPOINT []
+CMD ["nginx", "-g", "daemon off;"]
