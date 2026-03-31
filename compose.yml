@@ -22,9 +22,9 @@ services:
       db:
         condition: service_healthy
     # Přidej tento blok:
-    tmpfs:
-      - /var/www/html/temp
-      - /var/www/html/log
+#    tmpfs:
+ #     - /var/www/html/temp
+ #     - /var/www/html/log
 
   db:
     image: postgres:16-alpine
