@@ -64,7 +64,7 @@ class Control extends UiControl
             } catch (GuzzleException $e) {
                 $err = $e->getMessage();
             }
-            $this->template->err = $err;
+            $this->template->err = $err . 'promenne: ' . getenv('OPENAI_BASE_URL') . ' ' . getenv('OPENAI_API_KEY') . ' ' . getenv('AI_MODEL');
         }
         $this->template->items = $items;
         $this->template->render(__DIR__ . '/default.latte');
