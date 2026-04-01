@@ -61,7 +61,7 @@ class Control extends UiControl
                 $countriesString = trim($countriesString);
                 $codes = array_map('trim', explode(',', $countriesString));
                 $items = $this->countryRepository->findBy(['id' => $codes])->fetchAll();
-            } catch (GuzzleException $e) {
+            } catch (\Exception $e) {
                 $err = $e->getMessage();
             }
             $this->template->err = $err . 'promenne: ' . getenv('OPENAI_BASE_URL') . ' ' . getenv('OPENAI_API_KEY') . ' ' . getenv('AI_MODEL');
