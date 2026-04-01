@@ -14,17 +14,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    environment:
-      OPENAI_BASE_URL: "${OPENAI_BASE_URL}"
-      AI_MODEL: "${AI_MODEL}"
-      OPENAI_API_KEY: "${OPENAI_API_KEY}"
+    env_file:
+      - .env
     depends_on:
       db:
         condition: service_healthy
-    # Přidej tento blok:
-  #    tmpfs:
-  #     - /var/www/html/temp
-  #     - /var/www/html/log
 
   db:
     image: postgres:16-alpine
@@ -38,31 +32,3 @@ services:
       timeout: 5s
       retries: 10
       start_period: 10s
-
-#  pgadmin:
-#    image: dpage/pgadmin4
-#    ports:
-#      - "8080:80"
-#    environment:
-#      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-#      PGADMIN_DEFAULT_PASSWORD: root
-
-#  ollama:
-#    image: ollama/ollama
-#    ports:
-#      - "11434:11434"
-#    healthcheck:
-#      test: [ "CMD", "ollama", "list" ]
-#      interval: 5s
-#      timeout: 5s
-#      retries: 10
-
-#  ollama-pull:
-#    image: ollama/ollama
-#    environment:
-#      - OLLAMA_HOST=http://ollama:11434
-#    depends_on:
-#      ollama:
-#        condition: service_healthy
-#    command: pull gemma3:4b
-#    restart: "no"
