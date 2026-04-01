@@ -56,6 +56,10 @@ class Control extends UiControl
                         'stream'   => false,
                     ],
                 ]);
+                var_dump(getenv('OPENAI_BASE_URL'));
+                var_dump(getenv('OPENAI_API_KEY'));
+                var_dump(getenv('AI_MODEL'));
+
                 $data = Json::decode($response->getBody()->getContents(), true);
                 $countriesString = $data['choices'][0]['message']['content'] ?? '';
                 $countriesString = trim($countriesString);
