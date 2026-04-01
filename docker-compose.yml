@@ -15,15 +15,19 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      AI_API: "${OPENAI_BASE_URL}"
+      OPENAI_BASE_URL: "${OPENAI_BASE_URL}"
       AI_MODEL: "${AI_MODEL}"
       OPENAI_API_KEY: "${OPENAI_API_KEY}"
     depends_on:
       db:
         condition: service_healthy
+    # Přidej tento blok:
+  #    tmpfs:
+  #     - /var/www/html/temp
+  #     - /var/www/html/log
 
   db:
-    image: postgres:16-alpine # Tento image je povolený
+    image: postgres:16-alpine
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root

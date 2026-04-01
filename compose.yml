@@ -15,9 +15,9 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      AI_API: "${OPENAI_BASE_URL}"
+      OPENAI_BASE_URL: "${OPENAI_BASE_URL}"
       AI_MODEL: "${AI_MODEL}"
-      OPENAI_API_KEY: "${OPENAI_API_KEY}" # Opravil jsem ti tady překlep: chyběl znak $
+      OPENAI_API_KEY: "${OPENAI_API_KEY}"
     depends_on:
       db:
         condition: service_healthy
