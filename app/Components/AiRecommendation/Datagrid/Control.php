@@ -7,6 +7,7 @@ namespace App\Components\AiRecommendation\Datagrid;
 use App\Model\Db\Repository\CountryRepository;
 use App\Model\Security\Auth\User;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use Nette\Application\UI\Control as UiControl;
 use Nette\Utils\Json;
 use Nextras\Orm\Collection\ICollection;
@@ -31,6 +32,7 @@ class Control extends UiControl
             ->limitBy(10)
             ->fetchPairs('rating', 'country->name');
         $items = [];
+        $err = '';
         if (!empty($countries)) {
             $list = implode("\n", array_map(
                 fn($name, $rating) => "- {$name}: {$rating}/5",
@@ -40,20 +42,24 @@ class Control extends UiControl
 
             $prompt = sprintf('You are a travel advisor. The user has visited the following countries and rated them:\n{$s}\n\nBased on their preferences, recommend 3 countries they should visit next.\nRules:\n- Respond ONLY with ISO 3166-1 alpha-2 country codes\n- Separate them with commas\n- No spaces, no explanation, no markdown, no punctuation, nothing else\n- Output must match exactly this format: XX,XX,XX', $list);
 
-            $response = $client->post(getenv('AI_API'), [
-                'headers' => [
-                    'Content-Type'  => 'application/json',
-                    'Authorization' => 'Bearer ' . getenv('OPENAI_API_KEY'),
-                ],
-                'json' => [
-                    'model'    => getenv('AI_MODEL'),
-                    'messages' => [
-                        ['role' => 'user', 'content' => $prompt],
+            try {
+                $response = $client->post(getenv('AI_API'), [
+                    'headers' => [
+                        'Content-Type'  => 'application/json',
+                        'Authorization' => 'Bearer ' . getenv('OPENAI_API_KEY'),
                     ],
-                    'stream'   => false,
-                ],
-            ]);
-
+                    'json' => [
+                        'model'    => getenv('AI_MODEL'),
+                        'messages' => [
+                            ['role' => 'user', 'content' => $prompt],
+                        ],
+                        'stream'   => false,
+                    ],
+                ]);
+            } catch (GuzzleException $e) {
+                $err = $e->getMessage();
+            }
+            $this->template->err = $err;
             $data = Json::decode($response->getBody()->getContents(), true);
             $countriesString = $data['choices'][0]['message']['content'] ?? '';
             $countriesString = trim($countriesString);
