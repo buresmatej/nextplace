@@ -56,15 +56,15 @@ class Control extends UiControl
                         'stream'   => false,
                     ],
                 ]);
+                $data = Json::decode($response->getBody()->getContents(), true);
+                $countriesString = $data['choices'][0]['message']['content'] ?? '';
+                $countriesString = trim($countriesString);
+                $codes = array_map('trim', explode(',', $countriesString));
+                $items = $this->countryRepository->findBy(['id' => $codes])->fetchAll();
             } catch (GuzzleException $e) {
                 $err = $e->getMessage();
             }
             $this->template->err = $err;
-            $data = Json::decode($response->getBody()->getContents(), true);
-            $countriesString = $data['choices'][0]['message']['content'] ?? '';
-            $countriesString = trim($countriesString);
-            $codes = array_map('trim', explode(',', $countriesString));
-            $items = $this->countryRepository->findBy(['id' => $codes])->fetchAll();
         }
         $this->template->items = $items;
         $this->template->render(__DIR__ . '/default.latte');
