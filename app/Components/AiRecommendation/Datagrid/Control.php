@@ -45,6 +45,9 @@ class Control extends UiControl
             $apiKey = $_SERVER['OPENAI_API_KEY'] ?? $_ENV['OPENAI_API_KEY'] ?? '';
             $aiModel = $_SERVER['AI_MODEL'] ?? $_ENV['AI_MODEL'] ?? '';
             try {
+                if (!$baseUrl) {
+                    throw new \Exception("Kritická chyba: OPENAI_BASE_URL nebyla nalezena v $_SERVER ani v $_ENV");
+                }
                 $response = $client->post($baseUrl, [
                     'headers' => [
                         'Content-Type'  => 'application/json',
