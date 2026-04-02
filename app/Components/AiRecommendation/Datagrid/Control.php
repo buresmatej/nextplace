@@ -20,48 +20,69 @@ class Control extends UiControl
     ) {
     }
 
+    /**
+     * Pokusí se najít a načíst .env soubor z nejčastějších umístění v Dockeru.
+     */
     private function loadEnvManually(): void
     {
-        // Cesta k .env v rootu projektu (uprav počet ../ podle hloubky tvého adresáře)
-        // Předpokládám: app/Components/AiRecommendation/Datagrid/Control.php -> 4 úrovně nahoru
-        $envPath = __DIR__ . '/../../../../.env';
+        $possiblePaths = [
+            __DIR__ . '/../../../../.env',           // 4 úrovně nahoru (standardní Nette struktura)
+            getcwd() . '/.env',                      // Aktuální pracovní adresář
+            $_SERVER['DOCUMENT_ROOT'] . '/../.env',  // Nad složkou www/public
+            '/var/www/html/.env',                    // Standardní Docker cesta
+            '/var/www/.env',                         // Alternativní Docker cesta
+        ];
 
-        if (file_exists($envPath)) {
-            $lines = file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-            foreach ($lines as $line) {
-                // Přeskočit komentáře
-                if (strpos(trim($line), '#') === 0) continue;
+        foreach ($possiblePaths as $path) {
+            if (file_exists($path) && is_readable($path)) {
+                $content = file_get_contents($path);
+                if ($content === false) continue;
 
-                // Rozdělit na KLÍČ=HODNOTA
-                $parts = explode('=', $line, 2);
-                if (count($parts) === 2) {
-                    $key = trim($parts[0]);
-                    $value = trim($parts[1]);
-                    // Nastavit do $_ENV i $_SERVER, pokud tam ještě nejsou
-                    if (!isset($_SERVER[$key])) $_SERVER[$key] = $value;
-                    if (!isset($_ENV[$key])) $_ENV[$key] = $value;
+                $lines = explode("\n", $content);
+                foreach ($lines as $line) {
+                    $line = trim($line);
+                    if (empty($line) || str_starts_with($line, '#')) continue;
+
+                    $parts = explode('=', $line, 2);
+                    if (count($parts) === 2) {
+                        $key = trim($parts[0]);
+                        $value = trim($parts[1]);
+
+                        // Odstranění případných uvozovek kolem hodnoty
+                        $value = trim($value, "\"' ");
+
+                        // Naplnění všech možných PHP úložišť
+                        $_SERVER[$key] = $value;
+                        $_ENV[$key] = $value;
+                        putenv("$key=$value");
+                    }
                 }
+                return; // Jakmile jeden najdeme, končíme
             }
         }
     }
 
     public function render(): void
     {
-        // Nejdřív zkusíme načíst proměnné ručně
+        // 1. Inicializace a ruční načtení prostředí
         $this->loadEnvManually();
-
         $client = new Client();
-
-        $countries = $this->user
-            ->getLoggedUser()
-            ->destinationLogs
-            ->toCollection()
-            ->orderBy('rating', ICollection::DESC)
-            ->limitBy(10)
-            ->fetchPairs('rating', 'country->name');
-
         $items = [];
         $err = '';
+
+        // 2. Načtení proměnných s fallbacky (zkusí $_SERVER, pak $_ENV, pak getenv)
+        $baseUrl = trim((string)($_SERVER['OPENAI_BASE_URL'] ?? $_ENV['OPENAI_BASE_URL'] ?? getenv('OPENAI_BASE_URL') ?: ''));
+        $apiKey  = trim((string)($_SERVER['OPENAI_API_KEY'] ?? $_ENV['OPENAI_API_KEY'] ?? getenv('OPENAI_API_KEY') ?: ''));
+        $aiModel = trim((string)($_SERVER['AI_MODEL'] ?? $_ENV['AI_MODEL'] ?? getenv('AI_MODEL') ?: ''));
+
+        // 3. Logika doporučení
+        $loggedUser = $this->user->getLoggedUser();
+        $countries = $loggedUser
+            ? $loggedUser->destinationLogs->toCollection()
+                ->orderBy('rating', ICollection::DESC)
+                ->limitBy(10)
+                ->fetchPairs('rating', 'country->name')
+            : [];
 
         if (!empty($countries)) {
             $list = implode("\n", array_map(
@@ -70,16 +91,15 @@ class Control extends UiControl
                 array_keys($countries)
             ));
 
-            $prompt = sprintf("You are a travel advisor. The user has visited the following countries and rated them:\n%s\n\nBased on their preferences, recommend 3 countries they should visit next.\nRules:\n- Respond ONLY with ISO 3166-1 alpha-2 country codes\n- Separate them with commas\n- No spaces, no explanation, no markdown, no punctuation, nothing else\n- Output must match exactly this format: XX,XX,XX", $list);
-
-            // Získání proměnných z $_SERVER nebo $_ENV (po manuálním načtení)
-            $baseUrl = trim((string)($_SERVER['OPENAI_BASE_URL'] ?? $_ENV['OPENAI_BASE_URL'] ?? ''));
-            $apiKey = trim((string)($_SERVER['OPENAI_API_KEY'] ?? $_ENV['OPENAI_API_KEY'] ?? ''));
-            $aiModel = trim((string)($_SERVER['AI_MODEL'] ?? $_ENV['AI_MODEL'] ?? ''));
+            $prompt = sprintf(
+                "You are a travel advisor. The user has visited the following countries and rated them:\n%s\n\nBased on their preferences, recommend 3 countries they should visit next.\nRules:\n- Respond ONLY with ISO 3166-1 alpha-2 country codes\n- Separate them with commas\n- No spaces, no explanation, no markdown, no punctuation, nothing else\n- Output must match exactly this format: XX,XX,XX",
+                $list
+            );
 
             try {
+                // Kontrola, zda máme URL
                 if (empty($baseUrl)) {
-                    throw new \Exception("Kritická chyba: Konfigurační URL nebyla nalezena. (Zkontroluj cestu k .env v kódu)");
+                    throw new \Exception("Chyba: OPENAI_BASE_URL je prázdná. Prohledávané cesty: " . getcwd());
                 }
 
                 $response = $client->post($baseUrl, [
@@ -94,20 +114,23 @@ class Control extends UiControl
                         ],
                         'stream'   => false,
                     ],
+                    'timeout' => 10, // Timeout pro jistotu
                 ]);
 
                 $data = Json::decode($response->getBody()->getContents(), true);
-                $countriesString = $data['choices'][0]['message']['content'] ?? '';
-                $countriesString = trim($countriesString);
-                $codes = array_map('trim', explode(',', $countriesString));
-                $items = $this->countryRepository->findBy(['id' => $codes])->fetchAll();
+                $countriesString = trim($data['choices'][0]['message']['content'] ?? '');
+
+                if ($countriesString) {
+                    $codes = array_map('trim', explode(',', $countriesString));
+                    $items = $this->countryRepository->findBy(['id' => $codes])->fetchAll();
+                }
 
             } catch (\Exception $e) {
-                $err = $e->getMessage();
+                $err = "API Error: " . $e->getMessage();
             }
 
-            // Pro debugování na serveru (pak smaž)
-            $this->template->err = $err . ' | Načtená URL: ' . $baseUrl;
+            // Diagnostický výpis (můžeš smazat, až to pojede)
+            $this->template->err = $err . " [Debug: URL=" . ($baseUrl ?: 'NULL') . ", Dir=" . getcwd() . "]";
         }
 
         $this->template->items = $items;
