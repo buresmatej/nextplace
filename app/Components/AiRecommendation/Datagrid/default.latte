@@ -1,40 +1,33 @@
-<div class="journal-main-wrapper">
-    <header class="journal-page-header">
-        <div class="header-text">
-            <h1 class="page-title">Recommended for You</h1>
-            <p class="page-subtitle">Based on your travel history, we think you'll love these places.</p>
-        </div>
-    </header>
-    <h1>{$err}</h1>
-    {if !empty($items)}
-        <div class="journal-cards-grid">
-            {foreach $items as $item}
-                <article class="destination-card recommendation-card">
-                    <div class="card-top-bar">
-                        <span class="flag-icon">{$item->flagEmoji}</span>
-                        <span class="ai-badge">AI Match ✨</span>
-                    </div>
+{if isset($debug)}
+    <details open style="background:#1e1e1e;color:#d4d4d4;padding:1rem;border-radius:6px;font-family:monospace;font-size:13px;margin-bottom:1rem">
+        <summary style="cursor:pointer;font-size:14px;font-weight:bold;color:#569cd6">🔍 DEBUG — ENV proměnné</summary>
+        <table style="margin-top:.5rem;border-collapse:collapse;width:100%">
+            <tr><td style="color:#9cdcfe;padding:2px 8px">.env cesta</td><td>{$debug['env_file_path']}</td></tr>
+            <tr><td style="color:#9cdcfe;padding:2px 8px">.env existuje</td><td>{$debug['env_file_exists']}</td></tr>
+            <tr><td style="color:#9cdcfe;padding:2px 8px">.env čitelný</td><td>{$debug['env_file_readable']}</td></tr>
+        </table>
 
-                    <div class="card-content">
-                        <h2 class="destination-name">{$item->name}</h2>
-                        <span class="continent-tag">{$item->continent}</span>
+        {foreach $debug['sources'] as $key => $src}
+            <div style="margin-top:.75rem;border-left:3px solid #569cd6;padding-left:.75rem">
+                <strong style="color:#dcdcaa">{$key}</strong>
+                <table style="margin-top:.25rem;border-collapse:collapse">
+                    {foreach $src as $zdroj => $hodnota}
+                        <tr>
+                            <td style="color:#808080;width:100px;padding:1px 8px">{$zdroj}</td>
+                            <td style="color:{($hodnota === '(PRAZDNE)' || str_contains((string)$hodnota, 'nenalezeno')) ? '#f44747' : '#b5cea8'}">{$hodnota}</td>
+                        </tr>
+                    {/foreach}
+                </table>
+            </div>
+        {/foreach}
 
-
-                    </div>
-                </article>
-            {/foreach}
+        <div style="margin-top:.75rem">
+            <strong style="color:#9cdcfe">$_SERVER klíče obsahující 'openai'/'ai_':</strong>
+            {if $debug['vsechny_server_keys']}
+                {implode(', ', $debug['vsechny_server_keys'])}
+            {else}
+                <span style="color:#f44747">žádné nenalezeny</span>
+            {/if}
         </div>
-    {else}
-        <div class="empty-state-container">
-            <div class="empty-icon">🌎</div>
-            <h2 class="empty-title">No recommendations yet</h2>
-            <p class="empty-text">
-                To give you personalized tips, we first need to know where you've been.
-                Start by logging your first destination!
-            </p>
-            <a href="{plink DestinationLog:create}" class="add-trip-btn">
-                + Log your first trip
-            </a>
-        </div>
-    {/if}
-</div>
+    </details>
+{/if}

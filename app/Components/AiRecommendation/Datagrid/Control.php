@@ -18,10 +18,8 @@ class Control extends UiControl
         private CountryRepository $countryRepository,
     ) {
     }
-
     private function loadEnv(): void
     {
-        // Cesta z app/Components/AiRecommendation/Datagrid/ do rootu
         $path = dirname(__DIR__, 4) . '/.env';
 
         if (file_exists($path)) {
@@ -44,10 +42,47 @@ class Control extends UiControl
         $this->loadEnv();
         $client = new Client();
 
-        // Zkusíme všechny zdroje najednou
         $baseUrl = trim((string)($_SERVER['OPENAI_BASE_URL'] ?? getenv('OPENAI_BASE_URL') ?: ''));
         $apiKey  = trim((string)($_SERVER['OPENAI_API_KEY'] ?? getenv('OPENAI_API_KEY') ?: ''));
         $aiModel = trim((string)($_SERVER['AI_MODEL'] ?? getenv('AI_MODEL') ?: ''));
+
+        // === DEBUG ===
+        $envPath = dirname(__DIR__, 4) . '/.env';
+        $debug = [
+            'env_file_path'    => $envPath,
+            'env_file_exists'  => file_exists($envPath) ? 'ANO' : 'NE',
+            'env_file_readable'=> is_readable($envPath) ? 'ANO' : 'NE',
+            'sources' => [
+                'OPENAI_BASE_URL' => [
+                    '$_SERVER'  => $_SERVER['OPENAI_BASE_URL'] ?? '(nenalezeno)',
+                    'getenv'    => getenv('OPENAI_BASE_URL') ?: '(nenalezeno)',
+                    'vysledek'  => $baseUrl ?: '(PRAZDNE)',
+                ],
+                'OPENAI_API_KEY' => [
+                    '$_SERVER'  => isset($_SERVER['OPENAI_API_KEY'])
+                        ? substr($_SERVER['OPENAI_API_KEY'], 0, 6) . '...' : '(nenalezeno)',
+                    'getenv'    => getenv('OPENAI_API_KEY')
+                        ? substr(getenv('OPENAI_API_KEY'), 0, 6) . '...' : '(nenalezeno)',
+                    'vysledek'  => $apiKey ? substr($apiKey, 0, 6) . '...' : '(PRAZDNE)',
+                ],
+                'AI_MODEL' => [
+                    '$_SERVER'  => $_SERVER['AI_MODEL'] ?? '(nenalezeno)',
+                    'getenv'    => getenv('AI_MODEL') ?: '(nenalezeno)',
+                    'vysledek'  => $aiModel ?: '(PRAZDNE)',
+                ],
+            ],
+            'vsechny_server_keys' => array_filter(
+                array_keys($_SERVER),
+                fn($k) => str_contains(strtolower($k), 'openai')
+                    || str_contains(strtolower($k), 'ai_')
+            ),
+            'vsechny_getenv' => array_filter([
+                'OPENAI_BASE_URL' => getenv('OPENAI_BASE_URL'),
+                'OPENAI_API_KEY'  => getenv('OPENAI_API_KEY') ? '(nastaven)' : false,
+                'AI_MODEL'        => getenv('AI_MODEL'),
+            ]),
+        ];
+        // === KONEC DEBUG ===
 
         $items = [];
         $err = '';
@@ -62,7 +97,7 @@ class Control extends UiControl
 
             try {
                 if (!$baseUrl) {
-                    throw new \Exception("URL stale prazdna. Zkus v panelu smazat mezery v klici OPENAI_BASE_URL.");
+                    throw new \Exception("OPENAI_BASE_URL je prázdná.");
                 }
 
                 $response = $client->post($baseUrl, [
@@ -86,15 +121,11 @@ class Control extends UiControl
             } catch (\Exception $e) {
                 $err = $e->getMessage();
             }
+        }
 
-            // Pokud to stale nejde, vypiseme klicove info
-            if (!$baseUrl) {
-                $this->template->err = "Chyba: Promenne nenalezeny. Hledal jsem v: " . realpath(dirname(__DIR__, 4) . '/.env');
-            } else {
-                $this->template->err = $err;
-            }
-
+        $this->template->debug = $debug;
         $this->template->items = $items;
+        $this->template->err   = $err;
         $this->template->render(__DIR__ . '/default.latte');
     }
 }
