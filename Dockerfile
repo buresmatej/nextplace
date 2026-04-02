@@ -31,6 +31,7 @@ RUN \
     echo 'clear_env = no' >> /usr/local/etc/php-fpm.d/www.conf
 
 COPY entrypoint.sh /entrypoint.sh
+COPY docker/fpm-env.conf /usr/local/etc/php-fpm.d/zzz-env.conf
 RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
