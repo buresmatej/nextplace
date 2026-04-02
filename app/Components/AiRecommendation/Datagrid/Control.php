@@ -95,7 +95,15 @@ class Control extends UiControl
 
         if (!empty($countries)) {
             $list = implode("\n", array_map(fn($n, $r) => "- $n: $r/5", $countries, array_keys($countries)));
-            $prompt = "Recommend 3 countries (ISO codes) based on: \n" . $list;
+            $prompt = "You are a travel assistant. Based on the user's travel history (country: rating 1-5), recommend 3 NEW countries they haven't visited yet.
+            Return ONLY a comma-separated list of ISO 3166-1 alpha-2 country codes.
+            DO NOT include any introduction, explanations, or formatting.
+            
+            User travel history:
+            " . $list . "
+            
+            Output format:
+            CZ,SK,AT";
 
             try {
                 if (!$baseUrl) {
