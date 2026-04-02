@@ -14,11 +14,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    environment:
-      - OPENAI_BASE_URL
-      - OPENAI_API_KEY
-      - AI_MODEL
-      - PORT
     depends_on:
       db:
         condition: service_healthy
