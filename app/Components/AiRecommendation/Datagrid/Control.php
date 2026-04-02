@@ -127,10 +127,6 @@ class Control extends UiControl
                 $resContent = trim($data['choices'][0]['message']['content'] ?? '');
                 $codes = array_map('trim', explode(',', $resContent));
                 $items = $this->countryRepository->findBy(['id' => $codes])->fetchAll();
-                echo "<pre>";
-                print_r($codes); // nebo print_r($this->template->debug);
-                echo "</pre>";
-                die(); // ZASTAVÍ VŠE, uvidíš čistý text na bílém pozadí
 
             } catch (\Exception $e) {
                 $err = $e->getMessage();
