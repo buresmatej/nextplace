@@ -41,15 +41,17 @@ class Control extends UiControl
             ));
 
             $prompt = sprintf('You are a travel advisor. The user has visited the following countries and rated them:\n{$s}\n\nBased on their preferences, recommend 3 countries they should visit next.\nRules:\n- Respond ONLY with ISO 3166-1 alpha-2 country codes\n- Separate them with commas\n- No spaces, no explanation, no markdown, no punctuation, nothing else\n- Output must match exactly this format: XX,XX,XX', $list);
-
+            $baseUrl = $_SERVER['OPENAI_BASE_URL'] ?? $_ENV['OPENAI_BASE_URL'] ?? '';
+            $apiKey = $_SERVER['OPENAI_API_KEY'] ?? $_ENV['OPENAI_API_KEY'] ?? '';
+            $aiModel = $_SERVER['AI_MODEL'] ?? $_ENV['AI_MODEL'] ?? '';
             try {
-                $response = $client->post(getenv('OPENAI_BASE_URL'), [
+                $response = $client->post($baseUrl, [
                     'headers' => [
                         'Content-Type'  => 'application/json',
-                        'Authorization' => 'Bearer ' . getenv('OPENAI_API_KEY'),
+                        'Authorization' => 'Bearer ' . $apiKey,
                     ],
                     'json' => [
-                        'model'    => getenv('AI_MODEL'),
+                        'model'    => $aiModel,
                         'messages' => [
                             ['role' => 'user', 'content' => $prompt],
                         ],
@@ -68,7 +70,7 @@ class Control extends UiControl
             } catch (\Exception $e) {
                 $err = $e->getMessage();
             }
-            $this->template->err = $err . 'promenne: ' . getenv('OPENAI_BASE_URL') . ' ' . getenv('OPENAI_API_KEY') . ' ' . getenv('AI_MODEL');
+            $this->template->err = $err . 'promenne: ' . $baseUrl . ' ' . $apiKey . ' ' . $aiModel;
         }
         $this->template->items = $items;
         $this->template->render(__DIR__ . '/default.latte');
