@@ -120,7 +120,7 @@ class Control extends UiControl
                 $codes = array_map('trim', explode(',', $resContent));
                 $items = $this->countryRepository->findBy(['id' => $codes])->fetchAll();
                 echo "<pre>";
-                print_r($items); // nebo print_r($this->template->debug);
+                print_r($codes); // nebo print_r($this->template->debug);
                 echo "</pre>";
                 die(); // ZASTAVÍ VŠE, uvidíš čistý text na bílém pozadí
 
