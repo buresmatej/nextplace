@@ -20,25 +20,21 @@ class Control extends UiControl
     ) {
     }
 
-    /**
-     * Pokusí se najít a načíst .env soubor z nejčastějších umístění v Dockeru.
-     */
     private function loadEnvManually(): void
     {
+        // Podle tvého debugu jsme v /app/www. Soubor .env bude o úroveň výš v /app/.env
         $possiblePaths = [
-            __DIR__ . '/../../../../.env',           // 4 úrovně nahoru (standardní Nette struktura)
-            getcwd() . '/.env',                      // Aktuální pracovní adresář
-            $_SERVER['DOCUMENT_ROOT'] . '/../.env',  // Nad složkou www/public
-            '/var/www/html/.env',                    // Standardní Docker cesta
-            '/var/www/.env',                         // Alternativní Docker cesta
+            '/app/.env',                             // Nejpravděpodobnější cesta na tvém serveru
+            dirname(__DIR__, 4) . '/.env',           // Automatický výpočet o 4 úrovně výš
+            getcwd() . '/../.env',                   // O úroveň nad aktuálním adresářem (/app/www/../.env)
+            '/var/www/.env',
         ];
 
         foreach ($possiblePaths as $path) {
             if (file_exists($path) && is_readable($path)) {
-                $content = file_get_contents($path);
-                if ($content === false) continue;
+                $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+                if ($lines === false) continue;
 
-                $lines = explode("\n", $content);
                 foreach ($lines as $line) {
                     $line = trim($line);
                     if (empty($line) || str_starts_with($line, '#')) continue;
@@ -46,36 +42,30 @@ class Control extends UiControl
                     $parts = explode('=', $line, 2);
                     if (count($parts) === 2) {
                         $key = trim($parts[0]);
-                        $value = trim($parts[1]);
+                        $value = trim($parts[1], "\"' "); // Odstraní uvozovky i mezery
 
-                        // Odstranění případných uvozovek kolem hodnoty
-                        $value = trim($value, "\"' ");
-
-                        // Naplnění všech možných PHP úložišť
                         $_SERVER[$key] = $value;
                         $_ENV[$key] = $value;
                         putenv("$key=$value");
                     }
                 }
-                return; // Jakmile jeden najdeme, končíme
+                return;
             }
         }
     }
 
     public function render(): void
     {
-        // 1. Inicializace a ruční načtení prostředí
         $this->loadEnvManually();
         $client = new Client();
         $items = [];
         $err = '';
 
-        // 2. Načtení proměnných s fallbacky (zkusí $_SERVER, pak $_ENV, pak getenv)
+        // Zkusíme vytáhnout hodnoty
         $baseUrl = trim((string)($_SERVER['OPENAI_BASE_URL'] ?? $_ENV['OPENAI_BASE_URL'] ?? getenv('OPENAI_BASE_URL') ?: ''));
         $apiKey  = trim((string)($_SERVER['OPENAI_API_KEY'] ?? $_ENV['OPENAI_API_KEY'] ?? getenv('OPENAI_API_KEY') ?: ''));
         $aiModel = trim((string)($_SERVER['AI_MODEL'] ?? $_ENV['AI_MODEL'] ?? getenv('AI_MODEL') ?: ''));
 
-        // 3. Logika doporučení
         $loggedUser = $this->user->getLoggedUser();
         $countries = $loggedUser
             ? $loggedUser->destinationLogs->toCollection()
@@ -97,9 +87,9 @@ class Control extends UiControl
             );
 
             try {
-                // Kontrola, zda máme URL
                 if (empty($baseUrl)) {
-                    throw new \Exception("Chyba: OPENAI_BASE_URL je prázdná. Prohledávané cesty: " . getcwd());
+                    // Pokud je URL stále prázdná, vypíšeme, kde všude jsme hledali soubor .env
+                    throw new \Exception("Chyba: OPENAI_BASE_URL nenalezena. Hledal jsem v /app/.env a dalších.");
                 }
 
                 $response = $client->post($baseUrl, [
@@ -114,7 +104,7 @@ class Control extends UiControl
                         ],
                         'stream'   => false,
                     ],
-                    'timeout' => 10, // Timeout pro jistotu
+                    'timeout' => 15,
                 ]);
 
                 $data = Json::decode($response->getBody()->getContents(), true);
@@ -129,8 +119,7 @@ class Control extends UiControl
                 $err = "API Error: " . $e->getMessage();
             }
 
-            // Diagnostický výpis (můžeš smazat, až to pojede)
-            $this->template->err = $err . " [Debug: URL=" . ($baseUrl ?: 'NULL') . ", Dir=" . getcwd() . "]";
+            $this->template->err = $err;
         }
 
         $this->template->items = $items;
