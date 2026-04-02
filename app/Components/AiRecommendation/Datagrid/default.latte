@@ -20,6 +20,14 @@
                 </table>
             </div>
         {/foreach}
+        <div style="margin-top:.75rem">
+            <strong style="color:#9cdcfe">Všechny getenv():</strong>
+            <pre style="color:#ce9178">{var_export($debug['getenv_all'], true)}</pre>
+        </div>
+        <div style="margin-top:.75rem">
+            <strong style="color:#9cdcfe">$_ENV:</strong>
+            <pre style="color:#ce9178">{var_export($debug['_ENV'], true)}</pre>
+        </div>
 
         <div style="margin-top:.75rem">
             <strong style="color:#9cdcfe">$_SERVER klíče obsahující 'openai'/'ai_':</strong>

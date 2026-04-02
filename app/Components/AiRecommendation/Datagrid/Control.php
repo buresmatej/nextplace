@@ -82,6 +82,8 @@ class Control extends UiControl
                 'AI_MODEL'        => getenv('AI_MODEL'),
             ]),
         ];
+        $debug['getenv_all'] = getenv(); // všechny env vars co PHP zná
+        $debug['_ENV']       = $_ENV;    // alternativní superglobal
         // === KONEC DEBUG ===
 
         $items = [];
