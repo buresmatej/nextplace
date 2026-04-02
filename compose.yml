@@ -14,9 +14,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    # Pokud ten webový formulář vytvoří soubor .env, toto ho načte do systému
-    env_file:
-      - .env
+    # Tato sekce bez hodnot říká: "Vezmi ze systému, co tam je"
     environment:
       - OPENAI_BASE_URL
       - OPENAI_API_KEY
