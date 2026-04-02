@@ -22,7 +22,7 @@ class Control extends UiControl
     private function loadEnv(): void
     {
         // Cesta z app/Components/AiRecommendation/Datagrid/ do rootu
-        $path = dirname(__DIR__, 4) . '/.env';
+        $path = dirname(__DIR__, 5) . '/.env';
 
         if (file_exists($path)) {
             $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
@@ -89,7 +89,7 @@ class Control extends UiControl
 
             // Pokud to stale nejde, vypiseme klicove info
             if (!$baseUrl) {
-                $this->template->err = "Chyba: Promenne nenalezeny. Cesta k env: " . dirname(__DIR__, 4) . '/.env';
+                $this->template->err = "Chyba: Promenne nenalezeny. Cesta k env: " . dirname(__DIR__, 5) . '/.env';
             } else {
                 $this->template->err = $err;
             }
