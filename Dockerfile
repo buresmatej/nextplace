@@ -28,7 +28,7 @@ RUN \
     sed -i 's/^group =.*/group = root/g' /usr/local/etc/php-fpm.d/www.conf && \
     sed -i '/^access.log =/d' /usr/local/etc/php-fpm.d/*.conf && \
     sed -i 's/listen = 127.0.0.1:9000/listen = 0.0.0.0:9000/g' /usr/local/etc/php-fpm.d/www.conf && \
-    sed -i 's/;clear_env = no/clear_env = no/' /usr/local/etc/php-fpm.d/www.conf
+    echo 'clear_env = no' >> /usr/local/etc/php-fpm.d/www.conf
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
