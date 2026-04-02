@@ -1,12 +1,9 @@
 #!/bin/sh
 set -ex
 
-# === KONTROLA ENV PROMĚNNÝCH ===
-echo "=== ENV CHECK ==="
-echo "OPENAI_BASE_URL: ${OPENAI_BASE_URL:-NENASTAVENO}"
-echo "OPENAI_API_KEY: ${OPENAI_API_KEY:+nastaven}${OPENAI_API_KEY:-NENASTAVENO}"
-echo "AI_MODEL: ${AI_MODEL:-NENASTAVENO}"
-echo "=================="
+echo "=== ALL ENV VARS ==="
+printenv
+echo "===================="
 # === KONEC KONTROLY ===
 
 # Příprava složek v jediném povoleném místě
