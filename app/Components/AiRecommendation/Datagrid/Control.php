@@ -23,7 +23,6 @@ class Control extends UiControl
     {
         $client = new Client();
 
-        // Načtení proměnných z prostředí (priorita $_SERVER, pak getenv)
         $baseUrl = trim((string)($_SERVER['OPENAI_BASE_URL'] ?? getenv('OPENAI_BASE_URL') ?: ''));
         $apiKey  = trim((string)($_SERVER['OPENAI_API_KEY'] ?? getenv('OPENAI_API_KEY') ?: ''));
         $aiModel = trim((string)($_SERVER['AI_MODEL'] ?? getenv('AI_MODEL') ?: ''));
@@ -33,7 +32,6 @@ class Control extends UiControl
 
         $loggedUser = $this->user->getLoggedUser();
 
-        // Získání historie cest uživatele
         $countries = $loggedUser ? $loggedUser->destinationLogs->toCollection()
             ->orderBy('rating', ICollection::DESC)
             ->limitBy(10)
@@ -66,7 +64,7 @@ class Control extends UiControl
                         'model' => $aiModel,
                         'messages' => [['role' => 'user', 'content' => $prompt]],
                         'stream' => false,
-                        'temperature' => 0.3, // Nižší teplota pro striktnější formát
+                        'temperature' => 0.3,
                     ],
                     'timeout' => 15
                 ]);
@@ -74,7 +72,6 @@ class Control extends UiControl
                 $data = Json::decode($response->getBody()->getContents(), true);
                 $resContent = trim($data['choices'][0]['message']['content'] ?? '');
 
-                // Vyčištění odpovědi od případných teček a rozbití na pole kódů
                 $resContent = str_replace([' ', '.'], '', $resContent);
                 $codes = array_filter(explode(',', strtoupper($resContent)));
 
@@ -84,7 +81,6 @@ class Control extends UiControl
 
             } catch (\Exception $e) {
                 $err = "AI doporučení momentálně není dostupné.";
-                // Pro vývoj můžeš nechat: $err = $e->getMessage();
             }
         }
 

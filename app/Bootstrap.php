@@ -39,9 +39,7 @@ class Bootstrap
 
     public function initializeEnvironment(): void
     {
-        // Na školním serveru doporučuji vypnout DebugMode (false),
-        // Tracy logy teď najdeš v /tmp/nette_log v kontejneru
-        $this->configurator->setDebugMode(true);
+        $this->configurator->setDebugMode(false);
 
         $this->configurator->createRobotLoader()
             ->addDirectory(__DIR__)
@@ -59,7 +57,6 @@ class Bootstrap
 
     public function bootConsole(): Nette\DI\Container
     {
-        // I pro konzoli musíme inicializovat loader, aby našla třídy
         $this->configurator->createRobotLoader()
             ->addDirectory(__DIR__)
             ->register();

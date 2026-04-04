@@ -4,13 +4,10 @@ set -ex
 echo "=== ALL ENV VARS ==="
 printenv
 echo "===================="
-# === KONEC KONTROLY ===
 
-# Příprava složek v jediném povoleném místě
 mkdir -p /tmp/nette_temp /tmp/nette_log
 chmod -R 777 /tmp
 
-# PHP log
 touch /tmp/php-fpm.log && chmod 777 /tmp/php-fpm.log
 
 echo "Waiting for Postgres..."

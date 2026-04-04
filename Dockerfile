@@ -1,11 +1,8 @@
-# --- KROK 1: Stáhneme závislosti pomocí Composeru ---
 FROM composer:2 AS composer_stage
 WORKDIR /app
 COPY composer.json composer.lock ./
-# Stáhneme vendor (bez dev závislostí pro rychlost a čistotu)
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# --- KROK 2: Finální PHP obraz ---
 FROM php:8.4-fpm-alpine
 
 RUN apk add --no-cache libpq-dev && \
@@ -13,13 +10,10 @@ RUN apk add --no-cache libpq-dev && \
 
 WORKDIR /app
 
-# Kopírujeme kód tvé aplikace
 COPY . .
 
-# Kopírujeme SLOŽKU VENDOR z prvního kroku
 COPY --from=composer_stage /app/vendor ./vendor
 
-# Konfigurace FPM (stejná jako minule)
 RUN \
     sed -i '/^pid =/d' /usr/local/etc/php-fpm.conf && \
     sed -i '/^error_log =/d' /usr/local/etc/php-fpm.conf && \
