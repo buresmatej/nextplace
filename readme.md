@@ -1,64 +1,41 @@
-Nette Web Project
-=================
 
-Welcome to the Nette Web Project! This is a basic skeleton application built using
-[Nette](https://nette.org), ideal for kick-starting your new web projects.
+# Nextplace
 
-Nette is a renowned PHP web development framework, celebrated for its user-friendliness,
-robust security, and outstanding performance. It's among the safest choices
-for PHP frameworks out there.
+Nextplace is a travel logging platform where users can record and rate places they've visited around the world. Based on their ratings and travel history, an AI  analyzes their preferences and recommends new destinations tailored specifically to their taste making every next trip more personal than the last.
 
-If Nette helps you, consider supporting it by [making a donation](https://nette.org/donate).
-Thank you for your generosity!
+### Features
+- Destination logging
+- AI recommendations
 
+### Tech stack
+- PHP + Nette framework
+- PostgreSQL
+- Nextras ORM
+- Docker
 
-Requirements
-------------
+### Getting started
+#### 1. Clone the repository
+```bash
+git clone https://github.com/buresmatej/nextplace.git
+cd nextplace
+```
 
-This Web Project is compatible with Nette 3.2 and requires PHP 8.2.
+#### 2. Set up environment variables
+Create a `.env` file in the root of the project:
+```env
+OPENAI_API_KEY=your_openai_api_key
+OPENAI_BASE_URL=your_openai_base_url
+AI_MODEL=your_ai_model
+PORT=your_port
+```
 
+#### 3. Build and run with Docker
+```bash
+docker-compose build
+docker-compose up
+```
 
-Installation
-------------
+The app should now be running at `http://localhost:PORT`.
 
-To install the Web Project, Composer is the recommended tool. If you're new to Composer,
-follow [these instructions](https://doc.nette.org/composer). Then, run:
-
-	composer create-project nette/web-project path/to/install
-	cd path/to/install
-
-Ensure the `temp/` and `log/` directories are writable.
-
-
-Asset Building with Vite
-------------------------
-
-This project supports Vite for asset building, which is recommended but optional. To activate Vite:
-
-1. Uncomment the `type: vite` line in the `common.neon` configuration file under the assets mapping section.
-2. Then set up and build the assets:
-
-		npm install
-		npm run build
-
-
-Web Server Setup
-----------------
-
-To quickly dive in, use PHP's built-in server:
-
-	php -S localhost:8000 -t www
-
-Then, open `http://localhost:8000` in your browser to view the welcome page.
-
-For Apache or Nginx users, configure a virtual host pointing to your project's `www/` directory.
-
-**Important Note:** Ensure `app/`, `config/`, `log/`, and `temp/` directories are not web-accessible.
-Refer to [security warning](https://nette.org/security-warning) for more details.
-
-
-Minimal Skeleton
-----------------
-
-For demonstrating issues or similar tasks, rather than starting a new project, use
-[minimal skeleton](https://github.com/nette/web-project/tree/minimal).
+## License
+MIT
