@@ -677,3 +677,46 @@ input, button, select, textarea, a {
     }
 }
 
+.recommendation-card .card-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-hover-action {
+    margin-top: 15px;
+    opacity: 0;
+    transform: translateY(10px); /* Mírně posunuté dolů */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    visibility: hidden;
+}
+
+.destination-card:hover .card-hover-action {
+    opacity: 1;
+    transform: translateY(0); /* Vyjede na své místo */
+    visibility: visible;
+}
+
+.hotel-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #008080;
+    color: white;
+    text-decoration: none;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: background-color 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.hotel-btn:hover {
+    background-color: #006666;
+}
+
+.recommendation-card:hover {
+    border-style: solid;
+}
