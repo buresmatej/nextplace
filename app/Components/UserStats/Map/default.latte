@@ -1,0 +1,81 @@
+<div class="journal-main-wrapper">
+    <header class="journal-page-header">
+        <div class="header-text">
+            <h1 class="page-title">My World Map</h1>
+            <p class="page-subtitle">
+                You have visited {ifset $codes}{count($codes)}{else}0{/ifset}
+                {if count($codes) === 1}country{else}countries{/if} so far.
+            </p>
+        </div>
+    </header>
+
+    <div class="map-card">
+        <div id="world-map" style="width: 100%; height: 500px;"></div>
+    </div>
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsvectormap/dist/css/jsvectormap.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/jsvectormap"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsvectormap/dist/maps/world.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const rawCodes = {$codes};
+        const visitedCodes = Array.isArray(rawCodes)
+            ? rawCodes.map(code => String(code).toUpperCase().trim())
+            : [];
+
+        console.log('Visited Codes for Map:', visitedCodes);
+
+        {syntax off}
+        const map = new jsVectorMap({
+            selector: '#world-map',
+            map: 'world',
+
+            selectedRegions: visitedCodes,
+
+            backgroundColor: 'transparent',
+            draggable: true,
+            zoomOnScroll: true,
+
+            regionStyle: {
+                initial: {
+                    fill: '#e2e8f0',
+                    stroke: '#ffffff',
+                    strokeWidth: 1.5,
+                    fillOpacity: 1
+                },
+                hover: {
+                    fill: '#0f2c29'
+                },
+                selected: {
+                    fill: '#008080'
+                }
+            },
+
+            showTooltip: true,
+            onRegionTooltipShow(event, tooltip, code) {
+                const isVisited = visitedCodes.includes(code.toUpperCase());
+                const statusText = isVisited ? 'Visited' : 'Not visited yet';
+
+
+            }
+        });
+        {/syntax}
+    });
+</script>
+
+<style>
+    .map-card {
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 24px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
+    }
+    .map-tooltip {
+        font-family: 'Outfit', sans-serif;
+        padding: 5px;
+        text-align: center;
+    }
+</style>

@@ -21,6 +21,7 @@ final class RouterFactory
         $router->addRoute('ping', 'Api:ping');
         $router->addRoute('status', 'Api:status');
         $router->addRoute('ai', 'Ai:recommendation');
+        $router->addRoute('stats', 'User:stats');
         $router->addRoute('<presenter>/<action>[/<id>]', 'Home:default');
         return $router;
 	}

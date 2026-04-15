@@ -17,6 +17,7 @@ class Authorizator
 
         $acl->addResource('DestinationLog');
         $acl->addResource('Recommendation');
+        $acl->addResource('User');
 
         $acl->deny('guest');
         $acl->allow('guest', 'Sign', ['in', 'up']);
@@ -26,6 +27,7 @@ class Authorizator
         $acl->allow('user', 'Sign', 'out');
         $acl->allow('user', 'DestinationLog', ['seeDatagrid', 'create']);
         $acl->allow('user', 'Recommendation', 'see');
+        $acl->allow('user', 'User', 'seeStats');
 
         $acl->allow('admin');
 
