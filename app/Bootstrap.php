@@ -39,7 +39,7 @@ class Bootstrap
 
     public function initializeEnvironment(): void
     {
-        $this->configurator->setDebugMode(true);
+        $this->configurator->setDebugMode(false);
 
         $this->configurator->createRobotLoader()
             ->addDirectory(__DIR__)

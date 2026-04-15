@@ -693,7 +693,7 @@ input, button, select, textarea, a {
 
 .destination-card:hover .card-hover-action {
     opacity: 1;
-    transform: translateY(0)
+    transform: translateY(0);
     visibility: visible;
 }
 
